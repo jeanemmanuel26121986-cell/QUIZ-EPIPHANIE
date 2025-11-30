@@ -64,7 +64,7 @@ function loadQuestions() {
   questions.forEach((q) => {
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `<img src="${q.image}" alt="image"><p>${q.text}</p><h3>${q.question}</h3>`;
+    card.innerHTML = `<img src="${q.image}" alt="Image"><p>${q.text}</p><h3>${q.question}</h3>`;
     q.options.forEach(option => {
       const btn = document.createElement('button');
       btn.innerText = option;
@@ -88,13 +88,16 @@ function checkAnswer(selected, correct, btn) {
 
 function showScore() {
   document.getElementById('score').innerText = `Votre score : ${score}/${questions.length}`;
+
   // Envoi des données à Google Sheets
-  fetch('https://script.google.com/macros/s/AKfycbxtiKd2zq-0j0uo6s-evDWhYh77XT1gQJ8oj37D3YOyYv0eACsDqpDf1mAcfk8MLtFEow/exec', {
+  fetch('https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbzDfdzPlJBlum6evHCnTLP_zXZskx4zD8RsSw6opkJ6/dev/exec', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       username: document.getElementById('username').value,
       score: `${score}/${questions.length}`
     })
-  }).then(response => console.log('Score enregistré !'));
-}
+  })
+  .then(response => response.text())
+  .then(data => console.log('Réponse du serveur :', data))
+  .catch(error => console.error('Erreur :', error));
